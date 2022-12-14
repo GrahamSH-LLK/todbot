@@ -2,11 +2,10 @@ import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import config from "./config.js";
 import fs from 'fs'
 const { token } = config;
-import { importScripts } from "./util.js";
+import { importScripts, extractMessageExtremities } from "./util.js";
 import dare from "./commands/dare.js";
 import truth from "./commands/truth.js";
 import random from "./commands/random.js";
-
 import path from "node:path";
 import * as url from "node:url";
 const dirname = url.fileURLToPath(new URL(".", import.meta.url));
@@ -19,8 +18,10 @@ console.log()
 client.once(Events.ClientReady, (c) => {
   client.on("messageDelete", async (messageDelete) => {
     console.log(messageDelete)
-
-    let content = `${messageDelete.author.username}: ${messageDelete.content}\n`;
+    let {files} = await extractMessageExtremities(messageDelete)
+    let content = `${messageDelete.author.username}: ${messageDelete.content} (${files.reduce((acc, val)=> {
+      return acc + val.url
+    }, '')})\n`;
     fs.appendFile("db.txt", content, (err) => {
       return console.log(err);
     });
