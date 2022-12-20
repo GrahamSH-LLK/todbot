@@ -35,8 +35,8 @@ client.once(Events.ClientReady, (c) => {
     let content = `${messageDelete.author.username}: ${
       messageDelete.content
     } (${await files.reduce(async (acc, val) => {
-      return acc + `<img src="${await getDataURI(val.url)}"> `;
-    }, "")})\n`;
+      return acc + `<img src="${await getDataURI(val.url)}">`;
+    }, "")}) (${messageDelete.createdAt})\n`;
     fs.appendFile("db.txt", content, (err) => {
       return console.log(err);
     });
