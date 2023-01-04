@@ -31,7 +31,6 @@ client.once(Events.ClientReady, (c) => {
   client.on("messageDelete", async (messageDelete) => {
     console.log(messageDelete);
     let { files } = await extractMessageExtremities(messageDelete);
-    console.log(await getDataURI(files[0].url))
     let content = `${messageDelete.author.username}: ${
       messageDelete.content
     } (${await files.reduce(async (acc, val) => {
